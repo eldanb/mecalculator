@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "outFile": "out/mecalc.js",
+        "declaration": true,
+        "target": "es6"        
+    },
+
+    "include": [
+        "src/**/*.ts"
+    ]
+}

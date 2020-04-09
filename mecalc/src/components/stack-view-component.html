@@ -1,0 +1,8 @@
+<ion-scroll #scrollContainer style="height: 100%" scrollY="true">
+<ion-list>
+    <ion-item *ngFor="let stackObject of displayedStackItems; index as i"> 
+        <ion-label stacked>{{labelForStackRow(i)}}</ion-label>
+        <div class="stack-item" item-content>{{stackObject}}</div>
+    </ion-item>
+</ion-list>
+</ion-scroll>

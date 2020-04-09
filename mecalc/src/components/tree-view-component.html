@@ -1,0 +1,18 @@
+<div *ngIf="rootItem">
+    <div class="tree-view-current-path">
+        <ion-icon name="folder" style="vertical-align: middle"> </ion-icon>
+        <button style="vertical-align: middle" *ngFor="let navStep of navigationStack"
+                ion-button icon-start small outline 
+                (click)="folderClicked(navStep)"
+                >        
+            {{ navStep.getTitle() }} /</button>
+    </div>
+    <ion-list>
+        <button ion-item 
+                *ngFor="let stackObject of navigationStack[navigationStack.length-1].subItems()"
+                (click)="processItemClick(stackObject)">
+            <ion-icon *ngIf="stackObject.getIcon().length" name="{{stackObject.getIcon()}}" item-start></ion-icon>
+            {{stackObject.getTitle()}}
+        </button>    
+    </ion-list>
+</div>
