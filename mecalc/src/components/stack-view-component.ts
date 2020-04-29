@@ -7,7 +7,7 @@ import { NavController, Scroll } from 'ionic-angular';
 })
 export class StackView implements OnInit, AfterViewChecked, org.eldanb.mecalc.core.StackListener {
 
-  @Input('stack') 
+  @Input('stack')
   stack : org.eldanb.mecalc.core.ICalculatorStack;
 
   displayedStackItems: Array<string>;
@@ -16,7 +16,7 @@ export class StackView implements OnInit, AfterViewChecked, org.eldanb.mecalc.co
   @ViewChild('scrollContainer') scrollBox : Scroll;
 
   constructor(public navCtrl: NavController) {
-    this.displayedStackItems = [];   
+    this.displayedStackItems = [];
   }
 
   ngOnInit(): void {
@@ -30,8 +30,8 @@ export class StackView implements OnInit, AfterViewChecked, org.eldanb.mecalc.co
   }
 
   stackUpdateSplice(aSender: org.eldanb.mecalc.core.CalculatorStack, aStart: number, aLen: number, aNewVals: org.eldanb.mecalc.core.StackObject[]) {
-    this.displayedStackItems.splice(0, this.displayedStackPadding);      
-    
+    this.displayedStackItems.splice(0, this.displayedStackPadding);
+
     this.displayedStackItems.splice( (aSender.size()-aStart+1), aLen, ...(aNewVals ? aNewVals.reverse().map((i) => i.stackDisplayString()) : []))
 
     this.displayedStackPadding = this.displayedStackItems.length < 5 ? 5 - this.displayedStackItems.length : 0;
@@ -44,7 +44,7 @@ export class StackView implements OnInit, AfterViewChecked, org.eldanb.mecalc.co
     const stacklabels = ['x:', 'y:', 'z:', 'w:', 't:'];
 
     let revIdx = this.displayedStackItems.length - idx - 1;
-    return revIdx < stacklabels.length ? stacklabels[revIdx] : `${revIdx}:`;      
+    return revIdx < stacklabels.length ? stacklabels[revIdx] : `${revIdx}:`;
   }
 
   private loadStackItems() {

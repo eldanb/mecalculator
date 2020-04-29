@@ -10,8 +10,8 @@ declare namespace org.eldanb.mecalc.core {
         private _ctorArgs;
         private _ctor;
         constructor(ctor: new (...args: Array<any>) => T, ...ctorArgsToAttrs: Array<string>);
-        private valueToJson(v);
-        private valueFromJson(v);
+        private valueToJson;
+        private valueFromJson;
         toJson(o: object): object;
         fromJson(o: object): T;
     }
@@ -44,7 +44,7 @@ declare namespace org.eldanb.mecalc.core {
     abstract class RefCountedStackObject extends StackObject {
         _refCount: number;
         dup(): StackObject;
-        protected readonly refCount: number;
+        protected get refCount(): number;
         retire(): void;
         abstract retiringLastRef(): void;
     }
@@ -101,10 +101,10 @@ declare namespace org.eldanb.mecalc.core {
         _parsedObject: StackObject;
         _isBuiltin?: boolean;
         _resolvedName?: string;
-        readonly len: number;
-        readonly obj: StackObject;
-        readonly isBuiltin: boolean;
-        readonly resolvedName: string;
+        get len(): number;
+        get obj(): StackObject;
+        get isBuiltin(): boolean;
+        get resolvedName(): string;
         constructor(len: number, obj: StackObject, isBuiltin?: boolean, resolvedName?: string);
     }
     type ParserFn = (text: string) => (ParserResult | null);
@@ -193,9 +193,9 @@ declare namespace org.eldanb.mecalc.core {
         popMultiple(aCount: number): Array<StackObject>;
         dropAt(aAt: number): StackObject;
         clear(): void;
-        private _notifySpliceChange(aStart, aLen, aNewVals);
+        private _notifySpliceChange;
         static preconditionComponentToString(aComponent: StackPrecondition): string;
-        private _preconditionArrayToString(aPreCond);
+        private _preconditionArrayToString;
         static checkPreconditionComponent(aPrecond: StackPrecondition, aArg: StackObject): boolean;
         checkValidity(aPrecondition: Array<StackPrecondition>): boolean;
         assertArgTypes(aPrecondition: Array<StackPrecondition>): void;
@@ -221,16 +221,16 @@ declare namespace org.eldanb.mecalc.core {
         private _listeners;
         storageProvider: IStorageProvider;
         constructor();
-        readonly stack: CalculatorStack;
-        readonly parser: Parser;
-        readonly currentDir: calclib.filesys.Directory;
-        readonly homeDir: calclib.filesys.Directory;
+        get stack(): CalculatorStack;
+        get parser(): Parser;
+        get currentDir(): calclib.filesys.Directory;
+        get homeDir(): calclib.filesys.Directory;
         getProgExecContext(): ProgramExecutionContext;
         pushExecContext(aCtxt: ProgramExecutionContext): void;
         popExecContext(): ProgramExecutionContext;
         execObject(obj: core.StackObject): Promise<void>;
         processCommandLine(aCmd: string): Promise<void>;
-        private enqueueOnBusyQueue(what);
+        private enqueueOnBusyQueue;
         registerBuiltins(aBuiltins: BuiltinMap): void;
         getBuiltin(aName: string): StackObject | null;
         changeDir(aDir: calclib.filesys.Directory): void;
@@ -282,7 +282,7 @@ declare namespace org.eldanb.mecalc.calclib.scalars {
         constructor(aNum: number);
         static format: core.SerializationFormat;
         static sParse(aStr: string): core.ParserResult;
-        readonly value: number;
+        get value(): number;
         stackDisplayString(): string;
         conj(): MeFloat;
         neq(aOp: MeFloat): boolean;
@@ -313,7 +313,7 @@ declare namespace org.eldanb.mecalc.calclib {
         static readableName: string;
         _valuesList: Array<core.StackObject>;
         constructor(aList: Array<core.StackObject>);
-        readonly valuesList: Array<core.StackObject>;
+        get valuesList(): Array<core.StackObject>;
         static sParse(aStr: string): core.ParserResult;
         stackDisplayString(): string;
         get(aIdx: number): core.StackObject;
@@ -335,8 +335,8 @@ declare namespace org.eldanb.mecalc.calclib.scalars {
         _realVal: number;
         _imageVal: number;
         constructor(aReal?: number, aImag?: number);
-        readonly realVal: number;
-        readonly imageVal: number;
+        get realVal(): number;
+        get imageVal(): number;
         static sParse(aStr: string): core.ParserResult;
         stackDisplayString(): string;
         unparse(): string;
@@ -359,7 +359,7 @@ declare namespace org.eldanb.mecalc.calclib.filesys {
         constructor(aSymName: string);
         static sParse(aStr: string): core.ParserResult | null;
         stackDisplayString(): string;
-        readonly name: string;
+        get name(): string;
         static format: core.SerializationFormat;
     }
 }
@@ -387,14 +387,15 @@ declare namespace org.eldanb.mecalc.calclib.expr {
 }
 declare namespace org.eldanb.mecalc.calclib.expr {
     class ExpressionParser {
-        private static parseBinaryOp(opRegex, nextParser, parseCtx);
-        private static parseParen(parseCtx);
-        private static parseObject(parseCtx);
-        private static parseSymbol(parseCtx);
-        private static parseFnInvoke(parseCtx);
-        private static parsePrimary(parseCtx);
-        private static parseMulDiv(parseCtx);
-        private static parseAddSub(parseCtx);
+        private static parseBinaryOp;
+        private static parseParen;
+        private static parseObject;
+        private static parseSymbol;
+        private static parseFnInvoke;
+        private static parsePrimary;
+        private static parsePow;
+        private static parseMulDiv;
+        private static parseAddSub;
         static parse(aStr: string): core.ParserResult;
     }
 }
@@ -423,7 +424,7 @@ declare namespace org.eldanb.mecalc.calclib.expr.nodes {
     class MeExprNodeStackObject extends MeExprNode {
         protected _stackObject: core.StackObject;
         constructor(stackObject: core.StackObject);
-        readonly stackObject: core.StackObject;
+        get stackObject(): core.StackObject;
         eval(aContext: core.ProgramExecutionContext): Promise<core.StackObject>;
         derive(bySymbol: filesys.Symbol): MeExprNode;
         onLastRefRetire(): void;
@@ -444,7 +445,7 @@ declare namespace org.eldanb.mecalc.calclib.expr.nodes {
 declare namespace org.eldanb.mecalc.calclib.expr.nodes {
     class MeExprNodeSymbol extends MeExprNodeStackObject {
         constructor(sym: calclib.filesys.Symbol);
-        readonly symbol: calclib.filesys.Symbol;
+        get symbol(): calclib.filesys.Symbol;
         unparse(): string;
         derive(bySymbol: filesys.Symbol): MeExprNode;
         eval(aContext: core.ProgramExecutionContext): Promise<core.StackObject>;
@@ -475,9 +476,9 @@ declare namespace org.eldanb.mecalc.calclib.filesys {
         static readableName: string;
         constructor(name?: string, parent?: Directory, storageProvider?: core.IStorageProvider);
         stackDisplayString(): string;
-        readonly parent: Directory | null;
-        readonly name: string;
-        readonly itemNames: Array<string>;
+        get parent(): Directory | null;
+        get name(): string;
+        get itemNames(): Array<string>;
         store(aSym: Symbol, aObj: core.StackObject): Promise<void>;
         recall(aSym: Symbol): Promise<core.StackObject>;
         getByString(aStr: string): Promise<core.StackObject>;
@@ -485,14 +486,14 @@ declare namespace org.eldanb.mecalc.calclib.filesys {
         purge(aSym: Symbol): Promise<void>;
         dup(): core.StackObject;
         retire(): void;
-        private reparent(newParent);
-        private storeAll();
-        private pathForSymbol(symbolName);
-        private storeSymbol(symbolName, storedObj);
-        private ensureSymbolLoaded(symbolName);
+        private reparent;
+        private storeAll;
+        private pathForSymbol;
+        private storeSymbol;
+        private ensureSymbolLoaded;
         loadIndexFromStorage(): Promise<void>;
-        private purgeSymbol(symbolName, symbolObj);
-        private readonly storagePath;
+        private purgeSymbol;
+        private get storagePath();
     }
 }
 declare namespace org.eldanb.mecalc.calclib.filesys {
@@ -502,7 +503,7 @@ declare namespace org.eldanb.mecalc.calclib.linear {
         static readableName: string;
         _valuesVector: Array<core.StackObject>;
         constructor(aVec: Array<core.StackObject>);
-        readonly valuesVector: Array<core.StackObject>;
+        get valuesVector(): Array<core.StackObject>;
         static sParseVectorValues(aStr: string): Array<core.StackObject> | null;
         static sParse(aStr: string): core.ParserResult;
         stackDisplayString(): string;
@@ -561,7 +562,7 @@ declare namespace org.eldanb.mecalc.calclib.program.instr {
 }
 declare namespace org.eldanb.mecalc.calclib.program {
     class ProgramParser {
-        private static parseBlock(aStr, aTerminatorRe);
+        private static parseBlock;
         static parse(aStr: string): core.ParserResult;
     }
 }
@@ -611,16 +612,16 @@ declare namespace org.eldanb.mecalc.calclib.program.instr {
 declare namespace org.eldanb.mecalc.calclib.scalars {
     class MeBinaryNumber extends core.StackObject {
         static radixIdToBase: {
-            'd': number;
-            'h': number;
-            'o': number;
-            'b': number;
+            d: number;
+            h: number;
+            o: number;
+            b: number;
         };
         static readableName: string;
         _radix: string;
         _value: number;
-        readonly radix: string;
-        readonly value: number;
+        get radix(): string;
+        get value(): number;
         constructor(aNum?: number, aRadix?: string);
         static sParse(aStr: string): core.ParserResult;
         stackDisplayString(): string;
@@ -634,7 +635,7 @@ declare namespace org.eldanb.mecalc.calclib.scalars {
         constructor(aText: string);
         static sParse(aStr: string): core.ParserResult | null;
         static format: core.SerializationFormat;
-        readonly value: string;
+        get value(): string;
         size(): number;
         get(idx: number): core.StackObject;
         put(idx: number, o: core.StackObject): void;
@@ -651,7 +652,7 @@ declare namespace org.eldanb.mecalc.core {
         private _stack;
         private _locals;
         constructor(aParentContext: ProgramExecutionContext, aStack: CalculatorStack);
-        readonly stack: CalculatorStack;
+        get stack(): CalculatorStack;
         getLocal(aName: string): StackObject;
         setLocal(aName: string, aValue: StackObject, aCreate: boolean): boolean;
         retire(): void;

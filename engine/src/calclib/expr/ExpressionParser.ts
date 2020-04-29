@@ -165,8 +165,12 @@ namespace org.eldanb.mecalc.calclib.expr {
                    
         }
 
+        private static parsePow(parseCtx : ExpressionParseContext) : MeExprNode { 
+            return ExpressionParser.parseBinaryOp(/^[\^]/, ExpressionParser.parsePrimary, parseCtx);
+        }
+
         private static parseMulDiv(parseCtx : ExpressionParseContext) : MeExprNode { 
-            return ExpressionParser.parseBinaryOp(/^[\/\*]/, ExpressionParser.parsePrimary, parseCtx);
+            return ExpressionParser.parseBinaryOp(/^[\/\*]/, ExpressionParser.parsePow, parseCtx);
         }
 
         private static parseAddSub(parseCtx : ExpressionParseContext) : MeExprNode { 

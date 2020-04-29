@@ -23,7 +23,11 @@ namespace org.eldanb.mecalc.calclib.expr.nodes {
               },    
         "*" : { cmd: core_commands.MeTimesDispatch,
                 level: 2
+        },
+        "^" : { cmd: core_commands.MePowDispatch,
+            level: 4
         }
+
     };
 
 
@@ -67,7 +71,7 @@ namespace org.eldanb.mecalc.calclib.expr.nodes {
             return false;
         }
 
-        simplifyConstants() : MeExprNode {
+        simplifyConstants() : MeExprNode {            
             if(this._operatorName == "+" || this._operatorName == "-") {
                 const lz = this.isZero(this._leftOperand);
                 const rz = this.isZero(this._rightOperand);
@@ -122,7 +126,7 @@ namespace org.eldanb.mecalc.calclib.expr.nodes {
                 const cr1 = new MeExprNodeBinaryOp("*", this._leftOperand.derive(bySymbol), this._rightOperand.dup()).simplifyConstants();
                 const cr2 = new MeExprNodeBinaryOp("*", this._leftOperand.dup(), this._rightOperand.derive(bySymbol)).simplifyConstants();
                 
-                return new MeExprNodeBinaryOp("+", cr1, cr2);
+                return new MeExprNodeBinaryOp("+", cr1, cr2).simplifyConstants();
             } else 
             if(this._operatorName == "/") {
                 const cr1 = new MeExprNodeBinaryOp("*", this._leftOperand.derive(bySymbol), this._rightOperand.dup()).simplifyConstants();
@@ -130,7 +134,24 @@ namespace org.eldanb.mecalc.calclib.expr.nodes {
                 const nom = new MeExprNodeBinaryOp("-", cr1, cr2).simplifyConstants();                ;
                 const denom = new MeExprNodeBinaryOp("*", this._rightOperand.dup(), this._rightOperand.dup()).simplifyConstants();
 
-                return new MeExprNodeBinaryOp("/", nom, denom);
+                return new MeExprNodeBinaryOp("/", nom, denom).simplifyConstants();
+            } else 
+            if(this._operatorName == "^") {                
+                return new MeExprNodeBinaryOp("*", 
+                        this.dup(),  
+                        new MeExprNodeBinaryOp("+", 
+                            new MeExprNodeBinaryOp("*", 
+                                this._leftOperand.derive(bySymbol),
+                                new MeExprNodeBinaryOp("/", 
+                                    this._rightOperand.dup(),
+                                    this._leftOperand.dup()).simplifyConstants()
+                            ).simplifyConstants(),
+                            new MeExprNodeBinaryOp("*", 
+                                this._rightOperand.derive(bySymbol),
+                                new MeExprNodeFnInvoke("ln", [this._leftOperand.dup()])
+                            ).simplifyConstants()
+                        ).simplifyConstants()
+                    ).simplifyConstants();
             }
         }
 

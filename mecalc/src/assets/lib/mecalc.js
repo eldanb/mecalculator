@@ -2058,8 +2058,11 @@ var org;
                                 ExpressionParser.parseFnInvoke(parseCtx) ||
                                 ExpressionParser.parseSymbol(parseCtx);
                         }
+                        static parsePow(parseCtx) {
+                            return ExpressionParser.parseBinaryOp(/^[\^]/, ExpressionParser.parsePrimary, parseCtx);
+                        }
                         static parseMulDiv(parseCtx) {
-                            return ExpressionParser.parseBinaryOp(/^[\/\*]/, ExpressionParser.parsePrimary, parseCtx);
+                            return ExpressionParser.parseBinaryOp(/^[\/\*]/, ExpressionParser.parsePow, parseCtx);
                         }
                         static parseAddSub(parseCtx) {
                             return ExpressionParser.parseBinaryOp(/^[\+\-]/, ExpressionParser.parseMulDiv, parseCtx);
@@ -2120,6 +2123,9 @@ var org;
                             },
                             "*": { cmd: calclib.core_commands.MeTimesDispatch,
                                 level: 2
+                            },
+                            "^": { cmd: calclib.core_commands.MePowDispatch,
+                                level: 4
                             }
                         };
                         class MeExprNodeBinaryOp extends expr.MeExprNode {
@@ -2199,7 +2205,7 @@ var org;
                                 else if (this._operatorName == "*") {
                                     const cr1 = new MeExprNodeBinaryOp("*", this._leftOperand.derive(bySymbol), this._rightOperand.dup()).simplifyConstants();
                                     const cr2 = new MeExprNodeBinaryOp("*", this._leftOperand.dup(), this._rightOperand.derive(bySymbol)).simplifyConstants();
-                                    return new MeExprNodeBinaryOp("+", cr1, cr2);
+                                    return new MeExprNodeBinaryOp("+", cr1, cr2).simplifyConstants();
                                 }
                                 else if (this._operatorName == "/") {
                                     const cr1 = new MeExprNodeBinaryOp("*", this._leftOperand.derive(bySymbol), this._rightOperand.dup()).simplifyConstants();
@@ -2207,7 +2213,10 @@ var org;
                                     const nom = new MeExprNodeBinaryOp("-", cr1, cr2).simplifyConstants();
                                     ;
                                     const denom = new MeExprNodeBinaryOp("*", this._rightOperand.dup(), this._rightOperand.dup()).simplifyConstants();
-                                    return new MeExprNodeBinaryOp("/", nom, denom);
+                                    return new MeExprNodeBinaryOp("/", nom, denom).simplifyConstants();
+                                }
+                                else if (this._operatorName == "^") {
+                                    return new MeExprNodeBinaryOp("*", this.dup(), new MeExprNodeBinaryOp("+", new MeExprNodeBinaryOp("*", this._leftOperand.derive(bySymbol), new MeExprNodeBinaryOp("/", this._rightOperand.dup(), this._leftOperand.dup()).simplifyConstants()).simplifyConstants(), new MeExprNodeBinaryOp("*", this._rightOperand.derive(bySymbol), new nodes.MeExprNodeFnInvoke("ln", [this._leftOperand.dup()])).simplifyConstants()).simplifyConstants()).simplifyConstants();
                                 }
                             }
                             onLastRefRetire() {
@@ -2521,7 +2530,7 @@ var org;
                         purge(aSym) {
                             var ret = this._contents[aSym.name];
                             return this.purgeSymbol(aSym.name, ret).then((b) => {
-                                if (ret) {
+                                if (ret) { // May have not been loaded
                                     delete this._contents[aSym.name];
                                     ret.retire();
                                 }
