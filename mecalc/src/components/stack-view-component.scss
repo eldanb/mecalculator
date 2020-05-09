@@ -1,0 +1,9 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  .scroller {
+    flex-grow: 1;
+    overflow-y: scroll;
+  }
+}
+

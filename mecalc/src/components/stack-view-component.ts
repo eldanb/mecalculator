@@ -1,9 +1,10 @@
-import { Component, Input, OnInit, ViewChild, AfterViewChecked  } from '@angular/core';
-import { NavController, Scroll } from 'ionic-angular';
+import { Component, Input, OnInit, ViewChild, AfterViewChecked, ElementRef  } from '@angular/core';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'stack-view',
-  templateUrl: 'stack-view-component.html'
+  templateUrl: 'stack-view-component.html',
+  styleUrls: ['stack-view-component.scss']
 })
 export class StackView implements OnInit, AfterViewChecked, org.eldanb.mecalc.core.StackListener {
 
@@ -13,7 +14,7 @@ export class StackView implements OnInit, AfterViewChecked, org.eldanb.mecalc.co
   displayedStackItems: Array<string>;
   displayedStackPadding: number;
 
-  @ViewChild('scrollContainer') scrollBox : Scroll;
+  @ViewChild('scrollContainer', {static: false}) scrollBox: ElementRef;
 
   constructor(public navCtrl: NavController) {
     this.displayedStackItems = [];
@@ -25,7 +26,7 @@ export class StackView implements OnInit, AfterViewChecked, org.eldanb.mecalc.co
   }
 
   ngAfterViewChecked() {
-    let scrollBoxElement = this.scrollBox._scrollContent.nativeElement;
+    let scrollBoxElement = this.scrollBox.nativeElement;
     scrollBoxElement.scrollTop = scrollBoxElement.scrollHeight;
   }
 

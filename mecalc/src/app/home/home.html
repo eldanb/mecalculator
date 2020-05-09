@@ -1,0 +1,240 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      MeCulcalator
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<div class="status-bar">
+  <ion-spinner *ngIf="busyIndicator > 0"></ion-spinner>
+  <div class="cur-dir-view">{{ getCurrentPath() }}</div>
+</div>
+
+<div class="stack-and-input-area">
+  <stack-view style="flex-grow: 1;" [stack]="calculatorStack">
+  </stack-view>
+
+  <div class="input-row" [@expandCmd]="expandedMode">
+    <ion-textarea #commandInput
+          placeholder="..."
+          autocapitalize="off"
+          clearInput
+          rows="1'"
+          (keydown)="handleCommandLineKeystroke()">
+    </ion-textarea>
+
+    <button ion-button item-end outline small (click)="onExpandClicked()">
+      <ion-icon name="expand"></ion-icon>
+    </button>
+  </div>
+</div>
+
+<div class="keyboard-area">
+  
+  <div class="keyboard-area-content">
+    <panel-keyboard *ngIf="selectedTab == 'keypad'" [params]="panelParams">      
+    </panel-keyboard>
+
+    <panel-history *ngIf="selectedTab == 'history'" [params]="panelParams">
+    </panel-history>
+
+    <panel-favorites *ngIf="selectedTab == 'favorites'" [params]="panelParams">
+    </panel-favorites>
+
+    <panel-directory *ngIf="selectedTab == 'directory'" [params]="panelParams">
+    </panel-directory>
+  </div>
+</div>
+
+   <!-- 
+     <ion-tab [root]="favorites" [rootParams]="panelParams" tabIcon="star-outline"></ion-tab>
+   <ion-tab [root]="history" [rootParams]="panelParams" tabIcon="time"></ion-tab>
+   <ion-tab [root]="directory" [rootParams]="panelParams" tabIcon="folder-open"></ion-tab>
+   <ion-tab [root]="favorites" [rootParams]="panelParams" tabIcon="list"></ion-tab> -->
+<!--
+  
+  -->
+ 
+<!-- </div> -->
+  <ion-footer>
+      <ion-tab-bar [selectedTab]="selectedTab">
+        <ion-tab-button tab="keypad">
+          <ion-icon name="keypad"></ion-icon>
+        </ion-tab-button>
+    
+        <ion-tab-button tab="favorites">
+          <ion-icon name="star-outline"></ion-icon>
+        </ion-tab-button>
+    
+        <ion-tab-button tab="history">
+          <ion-icon name="time"></ion-icon>
+        </ion-tab-button>
+    
+        <ion-tab-button tab="directory">
+          <ion-icon name="folder-open"></ion-icon>
+        </ion-tab-button>
+    
+        <ion-tab-button tab="menu">
+          <ion-icon name="list"></ion-icon>
+        </ion-tab-button>
+      </ion-tab-bar>
+        <!--
+        <ion-segment  [value]="selectedTab" (ionChange)="tabSelected($event)">
+          
+          <ion-segment-button value="keypad">
+            <ion-icon name="keypad"></ion-icon>            
+          </ion-segment-button>
+
+          <ion-segment-button value="favorites">
+            <ion-icon name="star-outline"></ion-icon>            
+          </ion-segment-button>
+
+          <ion-segment-button value="history">
+            <ion-icon name="time"></ion-icon>            
+          </ion-segment-button>
+
+          <ion-segment-button value="directory">
+            <ion-icon name="folder-open"></ion-icon>            
+          </ion-segment-button>
+
+          <ion-segment-button value="list">
+            <ion-icon name="list"></ion-icon>            
+          </ion-segment-button>
+
+        </ion-segment> -->
+
+  </ion-footer>
+  <!-- <ion-grid style="display: flex; flex-direction: column; justify-items: stretch;">
+    <ion-row>
+      <ion-col>
+      </ion-col>
+    </ion-row>
+
+    <ion-row style="flex-grow: 4">
+      <ion-col>
+    
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <ion-row style="flex-grow: 6">
+      <ion-col>
+        
+      </ion-col>
+    </ion-row>
+  </ion-grid>--> 
+<!--  <h1>bla</h1>
+  <ion-footer>
+    <ion-toolbar color="secondary">
+  
+      <button ion-button color="save">
+        SAVE DRAFT
+      </button>
+  
+      <ion-buttons end>
+        <button ion-button color="save">
+          SAVE DRAFT
+        </button>
+      </ion-buttons>
+      
+    </ion-toolbar>
+  </ion-footer>
+</ion-content>
+-->
+
+<!--
+    <div style="display: flex; flex-direction: column; height: 100%; justify-items: stretch; align-items: stretch">
+    <div style="flex-grow: 0; background: green; display: flex">
+      <ion-spinner *ngIf="busyIndicator > 0"></ion-spinner>
+      <div class="cur-dir-view">aa {{ getCurrentPath() }}</div>
+    </div>
+    <div style="flex-grow: 4; background: red; display: flex; flex-direction: column;">
+      <stack-view style="flex-grow: 1" [stack]="calculatorStack">
+      </stack-view>
+-->
+     <!-- <div style="display: flex" [@expandCmd]="expandedMode">
+        <ion-textarea #commandInput
+              placeholder="..."
+              autocapitalize="off"
+              clearInput
+              (keydown)="handleCommandLineKeystroke()">
+        </ion-textarea>
+
+        <button ion-button item-end outline small (click)="onExpandClicked()">
+          <ion-icon name="expand"></ion-icon>
+        </button>
+      </div> --> 
+    <!--</div>-->
+    <!--
+    <div style="flex-grow: 6; background: yellow; display: flex; flex-direction: column;">
+      <ion-grid style="flex-grow: 1">
+        <ion-row style="flex-grow: 1">
+          <ion-col style="padding:8px">
+            <ion-tabs tabsPlacement="bottom" style="height: 50%; box-sizing: border-box;">
+               <ion-tab [root]="keypad" [rootParams]="panelParams" tabIcon="keypad"></ion-tab>
+              <ion-tab [root]="favorites" [rootParams]="panelParams" tabIcon="star-outline"></ion-tab>
+              <ion-tab [root]="history" [rootParams]="panelParams" tabIcon="time"></ion-tab>
+              <ion-tab [root]="directory" [rootParams]="panelParams" tabIcon="folder-open"></ion-tab>
+              <ion-tab [root]="favorites" [rootParams]="panelParams" tabIcon="list"></ion-tab> 
+            </ion-tabs>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  -->
+  <!--</div>-->
+
+
+
+<!--
+
+-->
+  <!-- <ion-grid style="height:50%">
+    <ion-row style="height:35%">
+      <ion-col>
+        <ion-grid  style="height:100%">
+            <ion-row style="height:100%">
+              <ion-col>
+                  <stack-view [stack]="calculatorStack">
+                    </stack-view>
+              </ion-col>
+            </ion-row>
+
+            <ion-row [@expandCmd]="expandedMode" class="input-row">
+                <ion-col >
+                  <ion-item style="height:100%">
+
+                    <ion-textarea #commandInput
+                              placeholder="..."
+                              autocapitalize="off"
+                              clearInput
+                              (keydown)="handleCommandLineKeystroke()">
+                    </ion-textarea>
+
+                    <button ion-button item-end outline small (click)="onExpandClicked()">
+                        <ion-icon name="expand"></ion-icon>
+                    </button>
+                  </ion-item>
+                </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-col>
+    </ion-row>
+    <ion-row style="height:60%">
+        <ion-col>
+            <ion-tabs tabsPlacement="bottom" style="height:100%">
+                <ion-tab [root]="keypad" [rootParams]="panelParams" tabIcon="keypad"></ion-tab>
+                <ion-tab [root]="favorites" [rootParams]="panelParams" tabIcon="star-outline"></ion-tab>
+                <ion-tab [root]="history" [rootParams]="panelParams" tabIcon="time"></ion-tab>
+                <ion-tab [root]="directory" [rootParams]="panelParams" tabIcon="folder-open"></ion-tab>
+                <ion-tab [root]="favorites" [rootParams]="panelParams" tabIcon="list"></ion-tab>
+            </ion-tabs>
+        </ion-col>
+    </ion-row>
+
+  </ion-grid>
+-->
+
+
+

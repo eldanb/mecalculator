@@ -1,0 +1,46 @@
+.stackSlotLabel {
+    background-color: #cccccc;
+    width: 30px;
+    text-align: right;
+    vertical-align: top;
+    font-family: times-new-roman;
+    font-weight: normal;
+    font-style: italic;
+    font-size: 10pt;
+    padding-right: 2px;
+}
+
+.stackSlot {
+    background-color: #eeeeee;
+    width: 210px;
+    text-align: left;
+    font-family: courier;
+    font-weight: normal;
+    font-size: 10pt;
+}
+
+.mathSym { font-family: times-new-roman; font-size: 10pt }
+
+.curDirDisp {
+    font-size: 8pt;
+    font-family: arial;
+    text-align: right;
+}
+
+.btn {
+    font-size: 10pt;
+    background: #ffffdd;
+    font-family: arial;
+    text-align: center;
+    border: solid 1px #cccca1;
+    cursor: default;
+}
+
+.btnHover {
+    font-size: 10pt;
+    background: #cccca1;
+    font-family: arial;
+    text-align: center;
+    border: solid 1px #cccca1;
+    cursor: default;
+}

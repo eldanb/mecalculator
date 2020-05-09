@@ -1,0 +1,13 @@
+<ion-content>  
+    <ion-list>      
+        <ion-item *ngFor="let commandHistoryItem of commandHistory; index as i"
+                button
+                (touchend)="endTouch($event, commandHistoryItem);"
+                (touchstart)="startTouch($event, commandHistoryItem)" 
+                (click)="elementClicked(commandHistoryItem)"
+>
+            <div item-label>{{commandHistoryItem}}</div>
+        </ion-item>
+    </ion-list>
+</ion-content>
+  

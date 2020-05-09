@@ -1,0 +1,291 @@
+<html>
+  <head>
+    <title>meculcalator</title>
+
+    <meta name = "viewport" content = "width = device-width">
+    <meta name = "viewport" content = "initial-scale = 1.0">
+
+    <link rel="alternate" type="application/atom+xml" title="Meculcalator Version Update Feed" href="verupd_atom.xml"/>
+    <link rel="stylesheet" type="text/css" href="StdGui.css" /> 
+
+    <script src="engine/out/mecalc.js" language="javascript" type="text/javascript"></script>
+    <script>
+      var calculator = org.eldanb.mecalc.core.calculator;
+    </script>
+    <script src="StdGui.js" language="javascript" type="text/javascript"></script>    
+
+    
+    <script>
+function createDocument()
+{
+    var xmlDoc;
+    // code for IE
+    if (window.ActiveXObject)
+    {
+        xmlDoc=new ActiveXObject("Microsoft.XMLDOM");
+    }
+    // code for Mozilla, Firefox, Opera, etc.
+    else if (document.implementation && document.implementation.createDocument)
+    {
+        xmlDoc=document.implementation.createDocument("","",null);
+    }
+    else
+    {
+        alert('Your browser cannot handle this script');
+    }
+
+    return xmlDoc;
+}
+
+
+function archiveTest()
+{
+
+    var ldoc = createDocument();
+    var lArchive = new MeXmlArchive(ldoc);
+    lArchive.writeObject('home', calculator.getHomeDir());
+
+
+    var serializer = new XMLSerializer();
+    var xml = serializer.serializeToString(ldoc);
+    alert(xml);
+
+    var lInArch = new MeXmlArchive(ldoc, ldoc.documentElement);
+    var lObj = lInArch.readObject().value;
+                                    alert(lObj);
+    ldoc = createDocument();
+    lArchive = new MeXmlArchive(ldoc);
+    lArchive.writeObject('newhome', lObj);
+
+    xml = serializer.serializeToString(ldoc);
+    alert(xml);
+
+}
+
+
+    </script>
+  </head>
+  <body width="250" onload="javascript:onCalcLoaded(event)">
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-12212144-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+    <center>
+      <div style="width: 250px">
+        <div style="width: 250px; border-bottom: 1px solid #cccca1">
+          <img src="mecalclogo.png" style="border-bottom: 1px solid #cccca1"/>
+          <div id="loginSection" class="loginSection"></div>
+          <div id="curDirDisp" class="curDirDisp"></div>
+          <table id="stackTable"  
+                 cellspacing="2" cellpadding="0">
+            <tr><td class="stackSlotLabel">t:</td><td class="stackSlot"></td></tr>
+            <tr><td class="stackSlotLabel">w:</td><td class="stackSlot"></td></tr>
+            <tr><td class="stackSlotLabel">z:</td><td class="stackSlot"></td></tr>
+            <tr><td class="stackSlotLabel">y:</td><td class="stackSlot"></td></tr>
+            <tr><td class="stackSlotLabel">x:</td><td class="stackSlot"></td></tr>
+          </table>
+          
+          <table width="100%" cellspacing="0" cellpadding="3">
+            <tr>
+              <td style="border-bottom: 1px solid #cccca1;" colspan="5">
+                <textarea id="commandInput" onkeydown="javascript:return processCmdLineKeyDown(event)" rows="2"
+                       style="width: 100%; border: none; margin: 0px; padding: 0px; external-top: 2px; background-color: #dddddd"></textarea>
+                <button id="errorDisplay" onclick="javascript:dismissError()"
+                     style="width: 100%; border: solid 2px yellow; margin: 0px; padding: 0px; external-top: 2px; background-color: red; color: white; display: none; font-family:arial; font-size:8pt"></button>
+
+              </td>
+            </tr>
+            <tr>
+              <td width="20%">
+                <div class="btn" onclick="javascript:sebClk(event)" onmouseover="javascript:btdHov(event)" onmouseout="javascript:btdOut(event)" id="swap">SWP</div>
+              </td>
+              <td width="20%">
+                <div class="btn" onclick="javascript:sebClk(event)" onmouseover="javascript:btdHov(event)" onmouseout="javascript:btdOut(event)" id="drop">
+                  DRP
+                </div>
+              </td>
+              <td width="20%">
+                <div class="btn" onclick="javascript:sebClk(event)" onmouseover="javascript:btdHov(event)" onmouseout="javascript:btdOut(event)" id="clear">
+                  CLR
+                </div>
+              </td>
+              <td width="40%" colspan="2">
+                <div class="btn" onclick="javascript:processInputCommand()" onmouseover="javascript:btdHov(event)" onmouseout="javascript:btdOut(event)">
+                  ENTER
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td width="20%">
+                <div class="btn" onclick="javascript:sebClk(event)" onmouseover="javascript:btdHov(event)" onmouseout="javascript:btdOut(event)" id="home">
+                  HOM
+                </div>
+              </td>
+              <td width="20%">
+                <div class="btn" onclick="javascript:sebClk(event)" onmouseover="javascript:btdHov(event)" onmouseout="javascript:btdOut(event)" id="updir">
+                  UP
+                </div>
+              </td>
+              <td width="20%">
+                <div class="btn" onclick="javascript:sebClk(event)" onmouseover="javascript:btdHov(event)" onmouseout="javascript:btdOut(event)" id="sto">
+                  STO
+                </div>
+              </td>
+              <td width="20%">
+                <div class="btn" onclick="javascript:sebClk(event)" onmouseover="javascript:btdHov(event)" onmouseout="javascript:btdOut(event)" id="rcl">
+                  RCL
+                </div>
+              </td>              
+              <td width="20%">
+                <div class="btn" onclick="javascript:sebClk(event)" onmouseover="javascript:btdHov(event)" onmouseout="javascript:btdOut(event)" id="exe">
+                  EXE
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td width="20%">
+                <div class="btn" onclick="javascript:sebClk(event)" onmouseover="javascript:btdHov(event)" onmouseout="javascript:btdOut(event)" id="plus">
+                  +
+                </div>
+              </td>
+              <td width="20%">
+                <div class="btn" onclick="javascript:sebClk(event)" onmouseover="javascript:btdHov(event)" onmouseout="javascript:btdOut(event)" id="minus">
+                  -
+                </div>
+              </td>
+              <td width="20%">
+                <div class="btn" onclick="javascript:sebClk(event)" onmouseover="javascript:btdHov(event)" onmouseout="javascript:btdOut(event)" id="times">
+                  *
+                </div>
+              </td>
+              <td width="20%">
+                <div class="btn" onclick="javascript:sebClk(event)" onmouseover="javascript:btdHov(event)" onmouseout="javascript:btdOut(event)" id="divide">
+                  /
+                </div>
+              </td>
+              <td width="20%">
+                <div class="btn" onclick="javascript:sebClk(event)" onmouseover="javascript:btdHov(event)" onmouseout="javascript:btdOut(event)" id="negate">
+                  +/-
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td width="20%">
+                <div class="btn" onclick="javascript:sebClk(event)" onmouseover="javascript:btdHov(event)" onmouseout="javascript:btdOut(event)" id="abs">
+                  | |
+                </div>
+              </td>
+              <td width="20%">
+                <div class="btn" onclick="javascript:sebClk(event)" onmouseover="javascript:btdHov(event)" onmouseout="javascript:btdOut(event)" id="inv">
+                  1/<span class="mathSym"><i>x</i></span>
+                </div>
+              </td>
+              <td width="20%">
+                <div class="btn" onclick="javascript:sebClk(event)" onmouseover="javascript:btdHov(event)" onmouseout="javascript:btdOut(event)" id="sqr">
+                  <span class="mathSym"><i>x</i></span><sup>2</sup>
+                </div>
+              </td>
+              <td width="20%">
+                <div class="btn" onclick="javascript:sebClk(event)" onmouseover="javascript:btdHov(event)" onmouseout="javascript:btdOut(event)" id="sqrt">
+                  &radic;<span class="mathSym"><i>x</i></span>
+                </div>
+              </td>
+              <td width="20%">
+                <div class="btn" onclick="javascript:sebClk(event)" onmouseover="javascript:btdHov(event)" onmouseout="javascript:btdOut(event)" id="pow">
+                  <span class="mathSym"><i>y<sup>x</sup></i></span>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td width="20%">
+                <div class="btn" onclick="javascript:sebClk(event)" onmouseover="javascript:btdHov(event)" onmouseout="javascript:btdOut(event)" id="cos">
+                  <span class="mathSym">cos</span>
+                </div>
+              </td>
+              <td width="20%">
+                <div class="btn" onclick="javascript:sebClk(event)" onmouseover="javascript:btdHov(event)" onmouseout="javascript:btdOut(event)" id="sin">
+                  <span class="mathSym">sin</span>
+                </div>
+              </td>
+              <td width="20%">
+                <div class="btn" onclick="javascript:sebClk(event)" onmouseover="javascript:btdHov(event)" onmouseout="javascript:btdOut(event)" id="tan">
+                  <span class="mathSym">tan</span>
+                </div>
+              </td>
+              <td width="20%">
+                <div class="btn" onclick="javascript:sebClk(event)" onmouseover="javascript:btdHov(event)" onmouseout="javascript:btdOut(event)" id="exp">
+                  <span class="mathSym"><i>e<sup>x</sup></i></span>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td width="20%">
+                <div class="btn" onclick="javascript:sebClk(event)" onmouseover="javascript:btdHov(event)" onmouseout="javascript:btdOut(event)" id="acos">
+                  <span class="mathSym">acos</span>
+                </div>
+              </td>
+              <td width="20%">
+                <div class="btn" onclick="javascript:sebClk(event)" onmouseover="javascript:btdHov(event)" onmouseout="javascript:btdOut(event)" id="asin">
+                  <span class="mathSym">asin</span>
+                </div>
+              </td>
+              <td width="20%">
+                <div class="btn" onclick="javascript:sebClk(event)" onmouseover="javascript:btdHov(event)" onmouseout="javascript:btdOut(event)" id="atan">
+                  <span class="mathSym">atan</span>
+                </div>
+              </td>
+              <td width="20%">
+                <div class="btn" onclick="javascript:sebClk(event)" onmouseover="javascript:btdHov(event)" onmouseout="javascript:btdOut(event)" id="ln">
+                  <span class="mathSym">ln</span>
+                </div>
+              </td>
+            </tr>
+          </table>
+          
+        </div>
+        <table width="100%">
+          <tr>
+            <td align="left" style="font-size: 8pt; font-family: arial; padding:0px; margin:0px">
+              <a href="guide.xml" target="guide">User's Guide and Tutorial</a>
+            </td>
+            <td align="right" style="font-size: 8pt; font-family: arial; padding:0px; margin:0px">
+              <a href="mailto:eldanb@gmail.com">eldanb@gmail.com</a>
+            </td>
+          </tr>
+          <tr>
+            <td align="left" style="font-size: 8pt; font-family: arial; padding:0px; margin:0px">
+              <a href="qref.xml" target="qref">Quick Reference</a>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </center>
+  </body>
+  
+  <script>
+initStackDisplay();
+initButtons();
+
+commandInput = document.all("commandInput");
+errorDisplay = document.all("errorDisplay");
+curDirDisp = document.all("curDirDisp");
+
+errorDisplay.style.height = commandInput.offsetHeight+"px";
+
+showStack(calculator.stack);
+updateDirDisp();
+  </script>
+</html>

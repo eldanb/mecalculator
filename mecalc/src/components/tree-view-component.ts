@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, ViewChild, AfterViewChecked, Output, EventEmitter  } from '@angular/core';
-import { NavController, Scroll } from 'ionic-angular';
+import { NavController } from '@ionic/angular';
 
 export interface TreeViewItem {
     getTitle() : string;
@@ -15,6 +15,7 @@ export interface TreeViewItem {
 
 @Component({
   selector: 'tree-view',
+  styleUrls: ['tree-view-component.scss'],
   templateUrl: 'tree-view-component.html'
 })
 export class TreeView /*implements OnInit*/ {
@@ -46,14 +47,14 @@ export class TreeView /*implements OnInit*/ {
   processItemClick(item : TreeViewItem) {
       if(!item.isLeaf()) {
           item.loadSubitems().then(() => {
-            this.navigationStack.push(item);          
+            this.navigationStack.push(item);
           });
       } else {
           this.itemClicked.emit(item);
       }
   }
 
-  /*ngOnInit(): void {
+  ngOnInit(): void {
       this.navigationStack = [this.rootItem];
-  }*/
+  }
 }

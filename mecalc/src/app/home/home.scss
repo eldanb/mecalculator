@@ -1,0 +1,116 @@
+.scroll-content {
+    padding-bottom: 0 !important;
+}
+
+
+.kb-normal div.scroll-content {    
+    padding-top: 3px !important;
+}
+
+:host {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .status-bar {
+        flex-grow: 0; 
+        display: flex;
+    }
+
+    .stack-and-input-area {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 4;
+        flex-basis: 0;                
+        stack-view {            
+            flex-shrink: 1;
+            flex-grow: 1;
+        }
+
+    }
+    
+    .keyboard-area {
+        flex-grow: 6;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+
+        .keyboard-area-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            
+            & > * {
+                flex-grow: 1;
+            }
+        }
+    }
+
+    .stack-item  {
+        text-align: right;
+        width: 100%;        
+    }      
+
+    .cur-dir-view {
+        text-align: right;
+        font-weight: bold;
+        font-size: 8pt;
+        width: 100%;
+        padding: 5px;
+    }
+
+    .grid {
+        padding: 0;
+    }
+
+
+    .input-row {
+        flex-shrink: 0;
+        display: flex;
+        
+        background-color: #eeeeee;
+        margin:0;        
+        min-height: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        padding-left: 5px;
+        padding-right: 0;
+        .col {
+            padding: 0;
+        }
+        .item {
+            background-color: #eeeeee;
+            margin:0;
+            padding-top: 0;
+            padding-bottom: 0;
+            padding-left: 0;
+            padding-right: 0;            
+        }
+        .item-inner {
+            padding-right: 0px !important; 
+        }
+
+        input {
+            margin: 0;
+            background-color: white;            
+            border: 1px solid silver;
+            border-radius: 3px;
+            padding:3px;
+        }
+
+        textarea {
+            box-sizing: border-box;
+            height:100% !important;
+            background-color: white;            
+            border: 1px solid silver;
+            margin:0;            
+            border-radius: 3px;
+            padding:3px;
+            resize: none;
+        }
+        button {
+            background-color: white;
+        }
+
+    }
+}

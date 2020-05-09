@@ -1,0 +1,99 @@
+<ion-content [ngClass]="keyboardContentClass">
+  <ion-grid>
+    <ion-row>
+      <ion-col><kb-button shift0text="tan" shift1text="tan<sup>-1</sup>" shift1cmd="atan"></kb-button></ion-col>        
+      <ion-col><kb-button shift0text="tan" shift1text="tan<sup>-1</sup>" shift1cmd="atan"></kb-button></ion-col>        
+      <ion-col><kb-button shift0text="sin" shift1text="sin<sup>-1</sup>" shift1cmd="asin"></kb-button></ion-col>
+      <ion-col><kb-button shift0text="cos" shift1text="cos<sup>-1</sup>" shift1cmd="acos"></kb-button></ion-col>
+      <ion-col><kb-button shift0text="exp" shift1text="ln"></kb-button></ion-col>
+      <ion-col><kb-button shift0text="x<sup>2</sup>" shift0cmd="sqr" shift1text="sqrt"></kb-button></ion-col>      
+    </ion-row>
+    <ion-row>
+      <ion-col col-4><kb-button color="tertiary" shift0text="enter" shift0cmd="k:newline" ></kb-button></ion-col>              
+      <ion-col col-2><kb-button shift0text="1/x" shift0cmd="inv" shift1text="+/-" shift1cmd="negate"></kb-button></ion-col>        
+      <ion-col col-2><kb-button shift0text="abs" shift1text="conj"></kb-button></ion-col>        
+      <ion-col col-2><kb-button shift0text="y<sup>x</sup>" shift0cmd="pow"></kb-button></ion-col>        
+      <ion-col col-2><kb-button shift0text="y<sup>x</sup>" shift0cmd="pow"></kb-button></ion-col>        
+    </ion-row>
+
+    <!-- Normal keyboard -->
+    <ion-row *ngIf="!keyboardReduced">
+        <ion-col><kb-button shift0text="sto" shift1text="purge"></kb-button></ion-col>        
+        <ion-col><kb-button shift0text="7" shift0cmd="k:7" shift1text="&lt;&lt; &gt;&gt;" shift1cmd="q:&lt;&lt; | &gt;&gt;"></kb-button></ion-col>        
+        <ion-col><kb-button shift0text="8" shift0cmd="k:8" shift1text="'" shift1cmd="q:'|'"></kb-button></ion-col>        
+        <ion-col><kb-button shift0text="9" shift0cmd="k:9" shift1text="()" shift1cmd="q:(|)"></kb-button></ion-col>        
+        <ion-col><kb-button color="tertiary" shift0text="+"></kb-button></ion-col>          
+    </ion-row>
+    <ion-row *ngIf="!keyboardReduced">
+        <ion-col><kb-button shift0text="drop" shift1text="clear"></kb-button></ion-col>        
+
+        <ion-col><kb-button shift0text="4" shift0cmd="k:4" shift1text="{ }" shift1cmd="q:{ | }"></kb-button></ion-col>        
+        <ion-col><kb-button shift0text="5" shift0cmd="k:5" shift1text="&quot;" shift1cmd="q:&quot;|&quot;"></kb-button></ion-col>        
+        <ion-col><kb-button shift0text="6" shift0cmd="k:6" shift1text="[]" shift1cmd="q:[|]"></kb-button></ion-col>        
+        
+        <ion-col><kb-button color="tertiary" shift0text="-"></kb-button></ion-col>
+    </ion-row>
+    <ion-row *ngIf="!keyboardReduced">
+        <ion-col><kb-button shift0text="dup" shift1text="swap"></kb-button></ion-col>                    
+        <ion-col><kb-button shift0text="1" shift0cmd="k:1" shift1text="bin" shift1cmd="bin"></kb-button></ion-col>        
+        <ion-col><kb-button shift0text="2" shift0cmd="k:2" shift1text="dec" shift1cmd="dec"></kb-button></ion-col>        
+        <ion-col><kb-button shift0text="3" shift0cmd="k:3" shift1text="hex" shift1cmd="hex"></kb-button></ion-col>        
+        <ion-col><kb-button color="tertiary" shift0text="&times;" shift0cmd="*"></kb-button></ion-col>            
+    </ion-row>
+
+    <ion-row *ngIf="!keyboardReduced"> 
+        <ion-col>
+          <ion-button size="block" 
+                  [color]="shiftState == 1 ? 'secondary' : 'primary'"
+                  (click)="shiftButtonClicked($event)">
+                  <ion-icon *ngIf="shiftState == 1 && shiftLocked" 
+                      name="lock-closed-outline"></ion-icon>
+                  <span *ngIf="!(shiftState == 1 && shiftLocked)">                      
+                  SHIFT
+                  </span>
+                  
+          </ion-button>
+        </ion-col>
+        <ion-col><kb-button shift0text="0" shift0cmd="k:0" shift1text="#" shift1cmd="k:#"></kb-button></ion-col>        
+        <ion-col><kb-button shift0text="." shift0cmd="k:." shift1text="h" shift1cmd="k:h"></kb-button></ion-col>        
+        <ion-col><kb-button shift0text="SPC" shift0cmd="k: " shift1text="b" shift1cmd="k:b"></kb-button></ion-col>        
+        <ion-col><kb-button color="tertiary" shift0text="&divide;" shift0cmd="/"></kb-button></ion-col>            
+    </ion-row>
+
+    <!-- Reduced keyboard -->
+
+    <ion-row *ngIf="keyboardReduced">
+        <ion-col><kb-button shift0text="sto" shift1text="purge"></kb-button></ion-col>        
+        <ion-col><kb-button shift0text="dup" shift1text="swap"></kb-button></ion-col>                    
+        <ion-col><kb-button shift0text="'" shift0cmd="q:'|'" shift1text="&quot;" shift1cmd="q:&quot;|&quot;"></kb-button></ion-col>        
+        <ion-col><kb-button color="tertiary" shift0text="&times;" shift0cmd="*"></kb-button></ion-col>
+        <ion-col><kb-button color="tertiary" shift0text="+"></kb-button></ion-col>          
+    </ion-row>
+    <ion-row *ngIf="keyboardReduced">
+        <ion-col>
+          <ion-button size="block"
+                  [color]="shiftState == 1 ? 'secondary' : 'primary'"                  
+                  (touchstart)="$event.preventDefault(); $event.stopPropagation()"
+                  (touchdown)="$event.preventDefault(); $event.stopPropagation()" 
+                  (mousedown)="$event.preventDefault(); $event.stopPropagation()"
+                  (touchend)="shiftButtonClicked($event); $event.preventDefault(); $event.stopPropagation();"
+                  (mouseup)="shiftButtonClicked($event); $event.preventDefault(); $event.stopPropagation();"
+                  (click)="$event.preventDefault(); $event.stopPropagation();">
+                  <ion-icon *ngIf="shiftState == 1 && shiftLocked" 
+                      name="lock-closed-outline"></ion-icon>
+                  <span *ngIf="!(shiftState == 1 && shiftLocked)">                      
+                  SHIFT
+                  </span>                  
+          </ion-button>
+        </ion-col>
+
+        <ion-col><kb-button shift0text="drop" shift1text="clear"></kb-button></ion-col>        
+        <ion-col><kb-button shift0text="&lt;&lt; &gt;&gt;" shift0cmd="q:&lt;&lt; | &gt;&gt;" shift1text="{ }" shift1cmd="q:{ | }"></kb-button></ion-col>        
+        <ion-col><kb-button color="secondary" shift0text="&divide;" shift0cmd="/"></kb-button></ion-col>
+        <ion-col><kb-button color="secondary" shift0text="-"></kb-button></ion-col>
+    </ion-row>
+    
+
+  </ion-grid>
+</ion-content>
+  
